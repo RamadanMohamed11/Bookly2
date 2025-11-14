@@ -1,6 +1,5 @@
 import '../../../../../core/widgets/custom_circular_progress_indicator.dart';
 import '../../../../../core/widgets/custom_error_widget.dart';
-import '../../view_models/best_seller_model.dart';
 import '../../view_models/newest_books_cubit/newest_books_cubit.dart';
 import 'best_seller_widget.dart';
 import 'package:flutter/material.dart';
