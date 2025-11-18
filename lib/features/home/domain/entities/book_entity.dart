@@ -1,9 +1,9 @@
 class BookEntity {
   final String id;
   final String title;
-  final String author;
-  final String description;
-  final DateTime publishedDate;
+  final String? author;
+  final String? description;
+  final DateTime? publishedDate;
 
   BookEntity({
     required this.id,
