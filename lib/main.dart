@@ -14,11 +14,15 @@ import 'package:google_fonts/google_fonts.dart';
 
 void main() async {
   setupServiceLocator();
+  await hiveInit();
+  runApp(BooklyApp());
+}
+
+Future<void> hiveInit() async {
   Hive.registerAdapter(BookEntityAdapter());
   await Hive.initFlutter();
   await Hive.openBox<BookEntity>(kFeaturedBooksBox);
   await Hive.openBox<BookEntity>(kNewestBooksBox);
-  runApp(BooklyApp());
 }
 
 class BooklyApp extends StatelessWidget {
