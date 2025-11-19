@@ -16,7 +16,8 @@ void main() async {
   setupServiceLocator();
   Hive.registerAdapter(BookEntityAdapter());
   await Hive.initFlutter();
-  await Hive.openBox<BookEntity>(kBooksEntiyBox);
+  await Hive.openBox<BookEntity>(kFeaturedBooksBox);
+  await Hive.openBox<BookEntity>(kNewestBooksBox);
   runApp(BooklyApp());
 }
 
