@@ -1,11 +1,11 @@
 import 'package:bookly/features/home/domain/entities/book_entity.dart';
+import 'package:bookly/features/home/domain/repos/home_repo.dart';
 import 'package:hive_ce/hive.dart';
 import 'package:hive_ce_flutter/hive_flutter.dart';
 
 import 'constants.dart';
 import 'core/utils/app_router.dart';
 import 'core/utils/service_locator.dart';
-import 'features/home/data/repos/home_repo.dart';
 import 'features/home/presentation/view_models/featured_books_cubit/featured_books_cubit.dart';
 import 'features/home/presentation/view_models/newest_books_cubit/newest_books_cubit.dart';
 import 'package:flutter/material.dart';
