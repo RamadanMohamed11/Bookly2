@@ -1,3 +1,5 @@
+import 'package:bookly/features/home/domain/entities/book_entity.dart';
+
 import '../../../../../core/utils/app_router.dart';
 import '../../../../../core/utils/styles.dart';
 import '../../../../../core/models/book_model/book_model.dart';
@@ -7,14 +9,14 @@ import 'package:go_router/go_router.dart';
 import 'package:redacted/redacted.dart';
 
 class BestSellerWidget extends StatelessWidget {
-  const BestSellerWidget({super.key, this.bookModel});
-  final BookModel? bookModel;
+  const BestSellerWidget({super.key, this.bookEntity});
+  final BookEntity? bookEntity;
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        GoRouter.of(context).push(AppRouter.kBooksView, extra: bookModel);
+        GoRouter.of(context).push(AppRouter.kBooksView, extra: bookEntity);
       },
       child: Row(
         children: [
@@ -28,9 +30,9 @@ class BestSellerWidget extends StatelessWidget {
               //   fit: BoxFit.fitHeight,
               // ),
               child: Hero(
-                tag: bookModel?.id ?? UniqueKey().toString(),
+                tag: bookEntity?.id ?? UniqueKey().toString(),
                 child: CachedNetworkImage(
-                  imageUrl: bookModel?.volumeInfo.imageLinks.thumbnail ?? '',
+                  imageUrl: bookEntity?.thumbnail ?? '',
                   fit: BoxFit.fitHeight,
                   errorWidget:
                       (context, url, error) => Container(
@@ -56,15 +58,15 @@ class BestSellerWidget extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  bookModel?.volumeInfo.title ?? '',
+                  bookEntity?.title ?? '',
                   style: Styles.gTsectraFineRegular20,
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                 ),
                 SizedBox(width: 5),
-                bookModel?.volumeInfo.authors != null
+                bookEntity?.author != null
                     ? Text(
-                      bookModel?.volumeInfo.authors![0],
+                      bookEntity?.author![0] ?? '',
                       style: Styles.montserratMedium14,
                     )
                     : SizedBox(),
@@ -76,13 +78,13 @@ class BestSellerWidget extends StatelessWidget {
                     Icon(Icons.star, color: Color(0xffFFDD4F)),
                     SizedBox(width: 4.2),
                     Text(
-                      bookModel?.volumeInfo.averageRating?.toString() ?? "0",
+                      bookEntity?.averageRating?.toString() ?? "0",
                       style: Styles.montserratMedium16,
                     ),
                     SizedBox(width: 7),
 
                     Text(
-                      "(${bookModel?.volumeInfo.ratingsCount?.toString() ?? "0"})",
+                      "(${bookEntity?.ratingsCount?.toString() ?? "0"})",
                       style: Styles.montserratRegular14,
                     ),
                   ],

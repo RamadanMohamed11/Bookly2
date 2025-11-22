@@ -30,7 +30,7 @@ class SearchResultListView extends StatelessWidget {
                     return Padding(
                       padding: const EdgeInsets.only(bottom: 10),
                       child: BestSellerWidget(
-                        bookModel:
+                        bookEntity:
                             state is SearchBooksSuccess
                                 ? state.books[index]
                                 : null,

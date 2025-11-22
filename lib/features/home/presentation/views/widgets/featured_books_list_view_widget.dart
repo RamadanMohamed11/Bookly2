@@ -1,7 +1,7 @@
 import '../../../../../core/widgets/custom_circular_progress_indicator.dart';
 import '../../../../../core/widgets/custom_error_widget.dart';
 import '../../../../../core/widgets/horizontal_books_list_item.dart';
-import '../../view_models/featured_books_cubit/featured_books_cubit.dart';
+import '../../manager/featured_books_cubit/featured_books_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -31,9 +31,9 @@ class FeaturedBooksListViewWidget extends StatelessWidget {
                   child: HorizontalBooksListItem(
                     imageUrl:
                         state is FeaturedBooksSuccess
-                            ? state.books[index].volumeInfo.imageLinks.thumbnail
+                            ? state.books[index].thumbnail!
                             : "",
-                    bookModel:
+                    bookEntity:
                         state is FeaturedBooksSuccess
                             ? state.books[index]
                             : null,

@@ -1,10 +1,14 @@
 import 'package:bookly/features/book_details/data/repo/book_details_repo.dart';
 import 'package:bookly/features/book_details/data/repo/book_details_repo_impl.dart';
+import 'package:bookly/features/home/data/data_sources/home_local_data_source.dart';
+import 'package:bookly/features/home/data/data_sources/home_remote_data_source.dart';
+import 'package:bookly/features/home/domain/repos/home_repo.dart';
+import 'package:bookly/features/home/domain/use_cases/fetch_featured_books_use_case.dart';
+import 'package:bookly/features/home/domain/use_cases/fetch_newest_books_use_case.dart';
 import 'package:bookly/features/search/data/repos/search_repo.dart';
 import 'package:bookly/features/search/data/repos/search_repo_impl.dart';
 
 import 'api_service.dart';
-import '../../features/home/data/repos/home_repo.dart';
 import '../../features/home/data/repos/home_repo_impl.dart';
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
@@ -14,8 +18,24 @@ final getIt = GetIt.instance;
 void setupServiceLocator() {
   getIt.registerSingleton<Dio>(Dio());
   getIt.registerSingleton<ApiService>(ApiService(getIt.get<Dio>()));
+  getIt.registerSingleton<HomeRemoteDataSource>(
+    HomeRemoteDataSourceImpl(getIt.get<ApiService>()),
+  );
+  getIt.registerSingleton<HomeLocalDataSource>(HomeLocalDataSourceImpl());
 
-  getIt.registerSingleton<HomeRepo>(HomeRepoImpl(getIt.get<ApiService>()));
+  getIt.registerSingleton<HomeRepo>(
+    HomeRepoImpl(
+      homeLocalDataSource: getIt.get<HomeLocalDataSource>(),
+      homeRemoteDataSource: getIt.get<HomeRemoteDataSource>(),
+    ),
+  );
+
+  getIt.registerSingleton<GetNewestBooksUseCase>(
+    GetNewestBooksUseCase(getIt.get<HomeRepo>()),
+  );
+  getIt.registerSingleton<GetFeaturedBooksUseCase>(
+    GetFeaturedBooksUseCase(getIt.get<HomeRepo>()),
+  );
 
   getIt.registerSingleton<BookDetailsRepo>(
     BookDetailsRepoImpl(getIt.get<ApiService>()),

@@ -1,6 +1,7 @@
 import 'package:bookly/core/utils/service_locator.dart';
 import 'package:bookly/features/book_details/data/repo/book_details_repo.dart';
 import 'package:bookly/features/book_details/presentation/view_models/similar_books_cubit/similar_books_cubit.dart';
+import 'package:bookly/features/home/domain/entities/book_entity.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'widgets/books_view_body.dart';
@@ -8,8 +9,8 @@ import '../../../../core/models/book_model/book_model.dart';
 import 'package:flutter/material.dart';
 
 class BooksView extends StatelessWidget {
-  const BooksView({super.key, required this.bookModel});
-  final BookModel bookModel;
+  const BooksView({super.key, required this.bookEntity});
+  final BookEntity bookEntity;
 
   @override
   Widget build(BuildContext context) {
@@ -17,10 +18,10 @@ class BooksView extends StatelessWidget {
     return Scaffold(
       body: BlocProvider(
         create:
-            (context) => SimilarBooksCubit(
-              getIt.get<BookDetailsRepo>(),
-            )..fetchSimilarBooks(category: bookModel.volumeInfo.categories![0]),
-        child: BooksViewBody(bookModel: bookModel),
+            (context) =>
+                SimilarBooksCubit(getIt.get<BookDetailsRepo>())
+                  ..fetchSimilarBooks(category: bookEntity.categories![0]),
+        child: BooksViewBody(bookEntity: bookEntity),
       ),
     );
   }

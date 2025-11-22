@@ -13,6 +13,16 @@ class BookEntity {
   final String? description;
   @HiveField(4)
   final DateTime? publishedDate;
+  @HiveField(5)
+  final String? thumbnail;
+  @HiveField(6)
+  final int? ratingsCount;
+  @HiveField(7)
+  final num? averageRating;
+  @HiveField(8)
+  final List<String>? categories;
+  @HiveField(9)
+  final String? previewLink;
 
   BookEntity({
     required this.id,
@@ -20,5 +30,10 @@ class BookEntity {
     required this.author,
     required this.description,
     required this.publishedDate,
+    required this.thumbnail,
+    required this.ratingsCount,
+    required this.averageRating,
+    required this.categories,
+    required this.previewLink,
   });
 }

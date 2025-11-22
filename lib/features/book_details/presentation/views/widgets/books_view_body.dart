@@ -1,4 +1,5 @@
 import 'package:bookly/core/widgets/custom_network_image.dart';
+import 'package:bookly/features/home/domain/entities/book_entity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -12,8 +13,8 @@ import 'price_and_free_preview_widget.dart';
 import 'rate_widget.dart';
 
 class BooksViewBody extends StatelessWidget {
-  const BooksViewBody({super.key, required this.bookModel});
-  final BookModel bookModel;
+  const BooksViewBody({super.key, required this.bookEntity});
+  final BookEntity bookEntity;
 
   @override
   Widget build(BuildContext context) {
@@ -36,9 +37,9 @@ class BooksViewBody extends StatelessWidget {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(12),
                   child: Hero(
-                    tag: bookModel.id,
+                    tag: bookEntity.id,
                     child: CustomNetworkImage(
-                      imageUrl: bookModel.volumeInfo.imageLinks.thumbnail,
+                      imageUrl: bookEntity.thumbnail ?? '',
                     ),
                   ),
                 ),
@@ -49,7 +50,7 @@ class BooksViewBody extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(left: 30, right: 30),
             child: Text(
-              bookModel.volumeInfo.title,
+              bookEntity.title,
               style: Styles.gTsectraFineRegular30,
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
@@ -57,11 +58,11 @@ class BooksViewBody extends StatelessWidget {
             ),
           ),
           SizedBox(height: 8),
-          bookModel.volumeInfo.authors != null
+          bookEntity.author != null
               ? Padding(
                 padding: const EdgeInsets.only(left: 30, right: 30),
                 child: Text(
-                  bookModel.volumeInfo.authors![0],
+                  bookEntity.author!,
                   style: Styles.montserratMedium18,
                 ),
               )
@@ -70,14 +71,14 @@ class BooksViewBody extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(left: 30, right: 30),
             child: RateWidget(
-              rate: bookModel.volumeInfo.averageRating ?? 0,
-              reviews: bookModel.volumeInfo.ratingsCount ?? 0,
+              rate: bookEntity.averageRating ?? 0,
+              reviews: bookEntity.ratingsCount ?? 0,
             ),
           ),
           SizedBox(height: 52),
           Padding(
             padding: const EdgeInsets.only(left: 30, right: 30),
-            child: PriceAndFreePreviewWidget(bookModel: bookModel),
+            child: PriceAndFreePreviewWidget(bookEntity: bookEntity),
           ),
           SizedBox(height: 51),
           Padding(
@@ -124,7 +125,7 @@ class BooksViewBody extends StatelessWidget {
                                       .imageLinks
                                       .thumbnail
                                   : "",
-                          bookModel:
+                          bookEntity:
                               state is SimilarBooksSuccess
                                   ? state.booksList[index]
                                   : null,

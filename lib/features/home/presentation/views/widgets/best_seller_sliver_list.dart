@@ -1,6 +1,6 @@
 import '../../../../../core/widgets/custom_circular_progress_indicator.dart';
 import '../../../../../core/widgets/custom_error_widget.dart';
-import '../../view_models/newest_books_cubit/newest_books_cubit.dart';
+import '../../manager/newest_books_cubit/newest_books_cubit.dart';
 import 'best_seller_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -24,7 +24,7 @@ class BestSellerSliverList extends StatelessWidget {
                     right: 30,
                   ),
                   child: BestSellerWidget(
-                    bookModel:
+                    bookEntity:
                         state is NewestBooksSuccess
                             ? state.booksList[index]
                             : null,

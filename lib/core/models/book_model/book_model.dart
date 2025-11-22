@@ -7,8 +7,7 @@ import 'volume_info.dart';
 
 class BookModel extends BookEntity {
   final String? kind;
-  @override
-  final String id;
+  final String iD;
   final String? etag;
   final String? selfLink;
   final VolumeInfo volumeInfo;
@@ -18,7 +17,7 @@ class BookModel extends BookEntity {
 
   BookModel({
     this.kind,
-    required this.id,
+    required this.iD,
     this.etag,
     this.selfLink,
     required this.volumeInfo,
@@ -26,7 +25,7 @@ class BookModel extends BookEntity {
     this.accessInfo,
     this.searchInfo,
   }) : super(
-         id: id,
+         id: iD,
          title: volumeInfo.title,
          author: volumeInfo.authors?.first,
          description: volumeInfo.description,
@@ -34,11 +33,16 @@ class BookModel extends BookEntity {
              volumeInfo.publishedDate != null
                  ? DateTime.tryParse(volumeInfo.publishedDate!)
                  : null,
+         thumbnail: volumeInfo.imageLinks.thumbnail,
+         ratingsCount: volumeInfo.ratingsCount,
+         averageRating: volumeInfo.averageRating,
+         categories: volumeInfo.categories,
+         previewLink: volumeInfo.previewLink,
        );
 
   factory BookModel.fromJson(Map<String, dynamic> json) => BookModel(
     kind: json['kind'] as String?,
-    id: json['id'] as String,
+    iD: json['id'] as String,
     etag: json['etag'] as String?,
     selfLink: json['selfLink'] as String?,
     volumeInfo: VolumeInfo.fromJson(json['volumeInfo'] as Map<String, dynamic>),
