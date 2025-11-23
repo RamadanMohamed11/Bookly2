@@ -5,18 +5,18 @@ import 'package:hive_ce/hive.dart';
 import '../../../../core/utils/api_service.dart';
 
 abstract class HomeRemoteDataSource {
-  Future<List<BookEntity>> fetchFeaturedBooks();
-  Future<List<BookEntity>> fetchNewestBooks();
+  Future<List<BookEntity>> fetchFeaturedBooks({required int pageNumber});
+  Future<List<BookEntity>> fetchNewestBooks({required int pageNumber});
 }
 
 class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
   final ApiService apiService;
   HomeRemoteDataSourceImpl(this.apiService);
   @override
-  Future<List<BookEntity>> fetchFeaturedBooks() async {
+  Future<List<BookEntity>> fetchFeaturedBooks({required int pageNumber}) async {
     Map<String, dynamic> data = await apiService.get(
       endPoint:
-          'volumes?q=Embedded%20System&Filtering=free-ebooks&Sorting=bestselling',
+          'volumes?q=Embedded%20System&Filtering=free-ebooks&Sorting=bestselling&page=${pageNumber * 10}',
     );
     List<BookEntity> books = getBooksList(data);
     saveBooksToHive(books, kFeaturedBooksBox);
@@ -24,10 +24,10 @@ class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
   }
 
   @override
-  Future<List<BookEntity>> fetchNewestBooks() async {
+  Future<List<BookEntity>> fetchNewestBooks({required int pageNumber}) async {
     Map<String, dynamic> data = await apiService.get(
       endPoint:
-          'volumes?q=Computer Science&Filtering=free-ebooks&Sorting=newest',
+          'volumes?q=Computer Science&Filtering=free-ebooks&Sorting=newest&page=${pageNumber * 10}',
     );
     List<BookEntity> books = getBooksList(data);
     saveBooksToHive(books, kNewestBooksBox);

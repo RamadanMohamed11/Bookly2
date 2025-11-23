@@ -1,8 +1,6 @@
 import 'package:bookly/features/home/domain/entities/book_entity.dart';
-import 'package:bookly/features/home/domain/repos/home_repo.dart';
 import 'package:bookly/features/home/domain/use_cases/fetch_featured_books_use_case.dart';
 import 'package:bookly/features/home/domain/use_cases/fetch_newest_books_use_case.dart';
-import 'package:hive_ce/hive.dart';
 import 'package:hive_ce_flutter/hive_flutter.dart';
 
 import 'constants.dart';
@@ -38,13 +36,13 @@ class BooklyApp extends StatelessWidget {
           create:
               (context) =>
                   FeaturedBooksCubit(getIt.get<GetFeaturedBooksUseCase>())
-                    ..fetchFeaturedBooks(),
+                    ..fetchFeaturedBooks(pageNumber: 0),
         ),
         BlocProvider<NewestBooksCubit>(
           create:
               (context) =>
                   NewestBooksCubit(getIt.get<GetNewestBooksUseCase>())
-                    ..fetchNewestBooks(),
+                    ..fetchNewestBooks(pageNumber: 0),
         ),
       ],
       child: MaterialApp.router(
