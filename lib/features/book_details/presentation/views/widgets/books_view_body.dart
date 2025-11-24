@@ -118,11 +118,7 @@ class BooksViewBody extends StatelessWidget {
                         child: HorizontalBooksListItem(
                           imageUrl:
                               state is SimilarBooksSuccess
-                                  ? state
-                                      .booksList[index]
-                                      .volumeInfo
-                                      .imageLinks
-                                      .thumbnail
+                                  ? state.booksList[index].thumbnail!
                                   : "",
                           bookEntity:
                               state is SimilarBooksSuccess

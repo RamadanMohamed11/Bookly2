@@ -1,32 +1,28 @@
 import 'package:bookly/core/errors/failures.dart';
 import 'package:bookly/core/utils/api_service.dart';
-import 'package:bookly/features/book_details/data/repo/book_details_repo.dart';
+import 'package:bookly/features/book_details/data/data_sources/book_details_remote_data_source.dart';
+import 'package:bookly/features/book_details/domain/repos/book_details_repo.dart';
 import 'package:bookly/core/models/book_model/book_model.dart';
+import 'package:bookly/features/home/domain/entities/book_entity.dart';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 
 class BookDetailsRepoImpl implements BookDetailsRepo {
-  final ApiService apiService;
-  BookDetailsRepoImpl(this.apiService);
+  final BookDetailsRemoteDataSource bookDetailsRemoteDataSource;
+  BookDetailsRepoImpl(this.bookDetailsRemoteDataSource);
   @override
-  Future<Either<Failure, List<BookModel>>> fetchSimilarBooks({
+  Future<Either<Failure, List<BookEntity>>> fetchSimilarBooks({
     required String category,
   }) async {
     try {
-      Map<String, dynamic> data = await apiService.get(
-        endPoint: 'volumes?q=$category&Filtering=free-ebooks&Sorting=relevance',
-      );
-      List<BookModel> books = [];
-      for (var e in data['items']) {
-        books.add(BookModel.fromJson(e));
-      }
-      return Right(books);
+      List<BookEntity> similarBooks = await bookDetailsRemoteDataSource
+          .fetchSimilarBooks(category: category);
+      return Right(similarBooks);
     } catch (e) {
       if (e is DioException) {
         return Left(ServerFailure.fromDioException(e));
       } else {
-        // removing the "Exception:" from e.toString()
-        return Left(ServerFailure(e.toString().split(':').last));
+        return Left(ServerFailure(e.toString()));
       }
     }
   }

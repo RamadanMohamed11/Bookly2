@@ -1,6 +1,4 @@
 import 'package:bookly/core/errors/failures.dart';
-import 'package:bookly/core/models/book_model/book_model.dart';
-import 'package:bookly/core/utils/api_service.dart';
 import 'package:bookly/features/home/domain/entities/book_entity.dart';
 import 'package:bookly/features/search/data/data_sources/search_remote_data_source.dart';
 import 'package:bookly/features/search/domain/repos/search_repo.dart';

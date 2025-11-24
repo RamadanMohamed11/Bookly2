@@ -1,5 +1,6 @@
 import 'package:bookly/core/utils/service_locator.dart';
-import 'package:bookly/features/book_details/data/repo/book_details_repo.dart';
+import 'package:bookly/features/book_details/domain/repos/book_details_repo.dart';
+import 'package:bookly/features/book_details/domain/use_cases/book_details_use_case.dart';
 import 'package:bookly/features/book_details/presentation/view_models/similar_books_cubit/similar_books_cubit.dart';
 import 'package:bookly/features/home/domain/entities/book_entity.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -18,7 +19,7 @@ class BooksView extends StatelessWidget {
       body: BlocProvider(
         create:
             (context) =>
-                SimilarBooksCubit(getIt.get<BookDetailsRepo>())
+                SimilarBooksCubit(getIt.get<BookDetailsUseCase>())
                   ..fetchSimilarBooks(category: bookEntity.categories![0]),
         child: BooksViewBody(bookEntity: bookEntity),
       ),

@@ -1,5 +1,4 @@
 import 'package:bookly/core/utils/service_locator.dart';
-import 'package:bookly/features/search/domain/repos/search_repo.dart';
 import 'package:bookly/features/search/domain/use_cases/fetch_searched_books_use_case.dart';
 import 'package:bookly/features/search/presentation/view_models/search_book_cubit/search_books_cubit.dart';
 import 'package:flutter/material.dart';

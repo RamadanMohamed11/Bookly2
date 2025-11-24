@@ -10,7 +10,7 @@ sealed class SimilarBooksState extends Equatable {
 final class SimilarBooksInitial extends SimilarBooksState {}
 
 final class SimilarBooksSuccess extends SimilarBooksState {
-  final List<BookModel> booksList;
+  final List<BookEntity> booksList;
   const SimilarBooksSuccess(this.booksList);
 }
 
