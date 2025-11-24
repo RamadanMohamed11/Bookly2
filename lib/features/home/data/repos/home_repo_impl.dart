@@ -25,9 +25,14 @@ class HomeRepoImpl implements HomeRepo {
       if (featuredBooks.isNotEmpty) {
         return Right(featuredBooks);
       }
-      featuredBooks = await homeRemoteDataSource.fetchFeaturedBooks(
-        pageNumber: pageNumber,
-      );
+      // If local returns empty, check if cache has any data
+      // If cache is empty (first launch), fetch from remote
+      // If cache has data but this page is empty, we've exhausted local pages
+      if (!homeLocalDataSource.hasFeaturedBooksInCache() || pageNumber == 0) {
+        featuredBooks = await homeRemoteDataSource.fetchFeaturedBooks(
+          pageNumber: pageNumber,
+        );
+      }
       return Right(featuredBooks);
     } catch (e) {
       if (e is DioException) {
@@ -49,9 +54,14 @@ class HomeRepoImpl implements HomeRepo {
       if (newestBooks.isNotEmpty) {
         return Right(newestBooks);
       }
-      newestBooks = await homeRemoteDataSource.fetchNewestBooks(
-        pageNumber: pageNumber,
-      );
+      // If local returns empty, check if cache has any data
+      // If cache is empty (first launch), fetch from remote
+      // If cache has data but this page is empty, we've exhausted local pages
+      if (!homeLocalDataSource.hasNewestBooksInCache() || pageNumber == 0) {
+        newestBooks = await homeRemoteDataSource.fetchNewestBooks(
+          pageNumber: pageNumber,
+        );
+      }
       return Right(newestBooks);
     } catch (e) {
       if (e is DioException) {

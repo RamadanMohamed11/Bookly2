@@ -7,6 +7,8 @@ import 'package:hive_ce/hive.dart';
 abstract class HomeLocalDataSource {
   List<BookEntity> fetchFeaturedBooks({required int pageNumber});
   List<BookEntity> fetchNewestBooks({required int pageNumber});
+  bool hasFeaturedBooksInCache();
+  bool hasNewestBooksInCache();
 }
 
 class HomeLocalDataSourceImpl implements HomeLocalDataSource {
@@ -32,6 +34,7 @@ class HomeLocalDataSourceImpl implements HomeLocalDataSource {
     int endIndex = startIndex + 10;
     var box = Hive.box<BookEntity>(kNewestBooksBox);
     if (startIndex >= box.length) {
+      log('No more books to fetch');
       return [];
     } else {
       if (endIndex > box.length) {
@@ -40,5 +43,17 @@ class HomeLocalDataSourceImpl implements HomeLocalDataSource {
     }
     log('Fetching newest books from index $startIndex to $endIndex');
     return box.values.toList().sublist(startIndex, endIndex);
+  }
+
+  @override
+  bool hasFeaturedBooksInCache() {
+    var box = Hive.box<BookEntity>(kFeaturedBooksBox);
+    return box.isNotEmpty;
+  }
+
+  @override
+  bool hasNewestBooksInCache() {
+    var box = Hive.box<BookEntity>(kNewestBooksBox);
+    return box.isNotEmpty;
   }
 }

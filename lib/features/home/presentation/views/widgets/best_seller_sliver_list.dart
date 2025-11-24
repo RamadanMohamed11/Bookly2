@@ -20,6 +20,7 @@ class BestSellerSliverList extends StatefulWidget {
 class _BestSellerSliverListState extends State<BestSellerSliverList> {
   int pageNumber = 1;
   bool isLoading = false;
+  bool hasMoreBooks = true;
   List<BookEntity> booksList = [];
 
   @override
@@ -29,17 +30,18 @@ class _BestSellerSliverListState extends State<BestSellerSliverList> {
   }
 
   void listenerMethod() async {
+    if (!hasMoreBooks || isLoading) return;
+
     if (widget.scrollController.position.pixels >=
         widget.scrollController.position.maxScrollExtent * 0.7) {
-      if (!isLoading) {
+      setState(() {
         isLoading = true;
-        // fetch more books
-        await BlocProvider.of<NewestBooksCubit>(
-          context,
-        ).fetchNewestBooks(pageNumber: pageNumber);
-        pageNumber++;
-        isLoading = false;
-      }
+      });
+      pageNumber++;
+      // fetch more books
+      await BlocProvider.of<NewestBooksCubit>(
+        context,
+      ).fetchNewestBooks(pageNumber: pageNumber);
     }
   }
 
@@ -54,13 +56,33 @@ class _BestSellerSliverListState extends State<BestSellerSliverList> {
     return BlocConsumer<NewestBooksCubit, NewestBooksState>(
       listener: (context, state) {
         if (state is NewestBooksSuccess) {
-          booksList.addAll(state.booksList);
+          if (state.booksList.isEmpty || state.booksList.length < 10) {
+            // If we got fewer than 10 books, we've reached the end
+            setState(() {
+              if (state.booksList.isNotEmpty) {
+                booksList.addAll(state.booksList);
+              }
+              hasMoreBooks = false;
+              isLoading = false;
+            });
+          } else {
+            setState(() {
+              booksList.addAll(state.booksList);
+              isLoading = false;
+            });
+          }
+        } else if (state is NewestBooksFailure) {
+          setState(() {
+            isLoading = false;
+            hasMoreBooks = false;
+          });
         }
       },
       builder: (context, state) {
         if (state is NewestBooksSuccess ||
             state is NewestBooksLoading ||
             state is NewestBooksPaginationLoading) {
+          final itemCount = booksList.isNotEmpty ? booksList.length : 10;
           return SliverList(
             delegate: SliverChildBuilderDelegate((context, index) {
               return Padding(
@@ -70,11 +92,7 @@ class _BestSellerSliverListState extends State<BestSellerSliverList> {
                   right: 30,
                 ),
                 child: BestSellerWidget(
-                  bookEntity:
-                      (state is NewestBooksSuccess ||
-                              state is NewestBooksPaginationLoading)
-                          ? booksList[index]
-                          : null,
+                  bookEntity: booksList.isNotEmpty ? booksList[index] : null,
                 ).redacted(
                   context: context,
                   redact: state is NewestBooksLoading,
@@ -83,7 +101,7 @@ class _BestSellerSliverListState extends State<BestSellerSliverList> {
                   ),
                 ),
               );
-            }, childCount: state is NewestBooksSuccess ? booksList.length : 10),
+            }, childCount: itemCount),
           );
         } else if (state is NewestBooksFailure) {
           return SliverToBoxAdapter(
