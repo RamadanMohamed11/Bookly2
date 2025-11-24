@@ -5,8 +5,10 @@ import 'package:bookly/features/home/data/data_sources/home_remote_data_source.d
 import 'package:bookly/features/home/domain/repos/home_repo.dart';
 import 'package:bookly/features/home/domain/use_cases/fetch_featured_books_use_case.dart';
 import 'package:bookly/features/home/domain/use_cases/fetch_newest_books_use_case.dart';
-import 'package:bookly/features/search/data/repos/search_repo.dart';
+import 'package:bookly/features/search/data/data_sources/search_remote_data_source.dart';
+import 'package:bookly/features/search/domain/repos/search_repo.dart';
 import 'package:bookly/features/search/data/repos/search_repo_impl.dart';
+import 'package:bookly/features/search/domain/use_cases/fetch_searched_books_use_case.dart';
 
 import 'api_service.dart';
 import '../../features/home/data/repos/home_repo_impl.dart';
@@ -41,5 +43,14 @@ void setupServiceLocator() {
     BookDetailsRepoImpl(getIt.get<ApiService>()),
   );
 
-  getIt.registerSingleton<SearchRepo>(SearchRepoImpl(getIt.get<ApiService>()));
+  getIt.registerSingleton<SearchRemoteDataSource>(
+    SearchRepoDataSourceImpl(getIt.get<ApiService>()),
+  );
+
+  getIt.registerSingleton<SearchRepo>(
+    SearchRepoImpl(getIt.get<SearchRemoteDataSource>()),
+  );
+  getIt.registerSingleton<FetchSearchedBooksUseCase>(
+    FetchSearchedBooksUseCase(getIt.get<SearchRepo>()),
+  );
 }

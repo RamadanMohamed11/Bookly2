@@ -1,25 +1,24 @@
 import 'package:bookly/core/errors/failures.dart';
 import 'package:bookly/core/models/book_model/book_model.dart';
 import 'package:bookly/core/utils/api_service.dart';
-import 'package:bookly/features/search/data/repos/search_repo.dart';
+import 'package:bookly/features/home/domain/entities/book_entity.dart';
+import 'package:bookly/features/search/data/data_sources/search_remote_data_source.dart';
+import 'package:bookly/features/search/domain/repos/search_repo.dart';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 
 class SearchRepoImpl implements SearchRepo {
-  ApiService apiService;
-  SearchRepoImpl(this.apiService);
+  final SearchRemoteDataSource searchRemoteDataSource;
+  SearchRepoImpl(this.searchRemoteDataSource);
   @override
-  Future<Either<Failure, List<BookModel>>> fetchSearchedBooks({
+  Future<Either<Failure, List<BookEntity>>> fetchSearchedBooks({
     required String searchQuery,
   }) async {
     try {
-      Map<String, dynamic> data = await apiService.get(
-        endPoint: 'volumes?q=$searchQuery',
+      List<BookEntity> books = await searchRemoteDataSource.fetchSearchedBooks(
+        query: searchQuery,
+        pageNumber: 0,
       );
-      List<BookModel> books = [];
-      for (var e in data['items']) {
-        books.add(BookModel.fromJson(e));
-      }
       return Right(books);
     } catch (e) {
       if (e is DioException) {

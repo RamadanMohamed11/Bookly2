@@ -12,7 +12,7 @@ final class SearchBooksInitial extends SearchBooksState {}
 final class SearchBooksLoading extends SearchBooksState {}
 
 final class SearchBooksSuccess extends SearchBooksState {
-  final List<BookModel> books;
+  final List<BookEntity> books;
   const SearchBooksSuccess(this.books);
   @override
   List<Object> get props => [books];
