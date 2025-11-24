@@ -2,7 +2,6 @@ import 'package:bookly/features/home/domain/entities/book_entity.dart';
 
 import '../../../../../core/utils/app_router.dart';
 import '../../../../../core/utils/styles.dart';
-import '../../../../../core/models/book_model/book_model.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -66,7 +65,7 @@ class BestSellerWidget extends StatelessWidget {
                 SizedBox(width: 5),
                 bookEntity?.author != null
                     ? Text(
-                      bookEntity?.author![0] ?? '',
+                      bookEntity?.author! ?? '',
                       style: Styles.montserratMedium14,
                     )
                     : SizedBox(),

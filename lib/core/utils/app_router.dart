@@ -1,7 +1,6 @@
 import 'package:bookly/features/home/domain/entities/book_entity.dart';
 
 import '../../features/book_details/presentation/views/books_view.dart';
-import '../models/book_model/book_model.dart';
 import '../../features/home/presentation/views/home_view.dart';
 import '../../features/search/presentation/views/search_view.dart';
 import '../../features/splash/presentation/views/splash_view.dart';

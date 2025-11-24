@@ -19,7 +19,9 @@ class HomeRepoImpl implements HomeRepo {
     required int pageNumber,
   }) async {
     try {
-      List<BookEntity> featuredBooks = homeLocalDataSource.fetchFeaturedBooks();
+      List<BookEntity> featuredBooks = homeLocalDataSource.fetchFeaturedBooks(
+        pageNumber: pageNumber,
+      );
       if (featuredBooks.isNotEmpty) {
         return Right(featuredBooks);
       }
@@ -41,7 +43,9 @@ class HomeRepoImpl implements HomeRepo {
     required int pageNumber,
   }) async {
     try {
-      List<BookEntity> newestBooks = homeLocalDataSource.fetchNewestBooks();
+      List<BookEntity> newestBooks = homeLocalDataSource.fetchNewestBooks(
+        pageNumber: pageNumber,
+      );
       if (newestBooks.isNotEmpty) {
         return Right(newestBooks);
       }

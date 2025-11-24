@@ -29,10 +29,7 @@ class BookModel extends BookEntity {
          title: volumeInfo.title,
          author: volumeInfo.authors?.first,
          description: volumeInfo.description,
-         publishedDate:
-             volumeInfo.publishedDate != null
-                 ? DateTime.tryParse(volumeInfo.publishedDate!)
-                 : null,
+         publishedDate: _parsePublishedDate(volumeInfo.publishedDate),
          thumbnail: volumeInfo.imageLinks.thumbnail,
          ratingsCount: volumeInfo.ratingsCount,
          averageRating: volumeInfo.averageRating,
@@ -74,8 +71,9 @@ class BookModel extends BookEntity {
   @override
   List<Object?> get props {
     return [
+      ...super.props,
       kind,
-      id,
+      iD,
       etag,
       selfLink,
       volumeInfo,
@@ -84,4 +82,36 @@ class BookModel extends BookEntity {
       searchInfo,
     ];
   }
+}
+
+DateTime? _parsePublishedDate(String? rawDate) {
+  if (rawDate == null) {
+    return null;
+  }
+
+  final trimmed = rawDate.trim();
+  if (trimmed.isEmpty) {
+    return null;
+  }
+
+  final normalized = trimmed.replaceAll('/', '-');
+
+  final yearOnly = RegExp(r'^\d{4}$');
+  if (yearOnly.hasMatch(normalized)) {
+    final year = int.tryParse(normalized);
+    return year == null ? null : DateTime(year);
+  }
+
+  final yearMonth = RegExp(r'^(\d{4})-(\d{2})$');
+  final yearMonthMatch = yearMonth.firstMatch(normalized);
+  if (yearMonthMatch != null) {
+    final year = int.tryParse(yearMonthMatch.group(1)!);
+    final month = int.tryParse(yearMonthMatch.group(2)!);
+    if (year != null && month != null && month >= 1 && month <= 12) {
+      return DateTime(year, month);
+    }
+    return null;
+  }
+
+  return DateTime.tryParse(normalized);
 }

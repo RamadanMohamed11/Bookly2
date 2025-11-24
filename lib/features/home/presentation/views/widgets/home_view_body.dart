@@ -4,8 +4,27 @@ import 'home_app_bar.dart';
 import 'featured_books_list_view_widget.dart';
 import 'package:flutter/material.dart';
 
-class HomeViewBody extends StatelessWidget {
+class HomeViewBody extends StatefulWidget {
   const HomeViewBody({super.key});
+
+  @override
+  State<HomeViewBody> createState() => _HomeViewBodyState();
+}
+
+class _HomeViewBodyState extends State<HomeViewBody> {
+  late ScrollController _scrollController;
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController = ScrollController();
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,6 +38,7 @@ class HomeViewBody extends StatelessWidget {
         SizedBox(height: 30),
         Expanded(
           child: CustomScrollView(
+            controller: _scrollController, // Add controller here
             physics: const BouncingScrollPhysics(),
             slivers: [
               const SliverToBoxAdapter(child: FeaturedBooksListViewWidget()),
@@ -33,7 +53,9 @@ class HomeViewBody extends StatelessWidget {
                 ),
               ),
               const SliverToBoxAdapter(child: SizedBox(height: 15)),
-              BestSellerSliverList(),
+              BestSellerSliverList(
+                scrollController: _scrollController,
+              ), // Pass controller
             ],
           ),
         ),
