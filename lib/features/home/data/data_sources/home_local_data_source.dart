@@ -9,6 +9,8 @@ abstract class HomeLocalDataSource {
   List<BookEntity> fetchNewestBooks({required int pageNumber});
   bool hasFeaturedBooksInCache();
   bool hasNewestBooksInCache();
+  int getFeaturedBooksCount();
+  int getNewestBooksCount();
 }
 
 class HomeLocalDataSourceImpl implements HomeLocalDataSource {
@@ -55,5 +57,17 @@ class HomeLocalDataSourceImpl implements HomeLocalDataSource {
   bool hasNewestBooksInCache() {
     var box = Hive.box<BookEntity>(kNewestBooksBox);
     return box.isNotEmpty;
+  }
+
+  @override
+  int getFeaturedBooksCount() {
+    var box = Hive.box<BookEntity>(kFeaturedBooksBox);
+    return box.length;
+  }
+
+  @override
+  int getNewestBooksCount() {
+    var box = Hive.box<BookEntity>(kNewestBooksBox);
+    return box.length;
   }
 }

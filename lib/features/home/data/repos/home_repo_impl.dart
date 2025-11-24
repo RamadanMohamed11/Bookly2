@@ -25,10 +25,14 @@ class HomeRepoImpl implements HomeRepo {
       if (featuredBooks.isNotEmpty) {
         return Right(featuredBooks);
       }
-      // If local returns empty, check if cache has any data
-      // If cache is empty (first launch), fetch from remote
-      // If cache has data but this page is empty, we've exhausted local pages
-      if (!homeLocalDataSource.hasFeaturedBooksInCache() || pageNumber == 0) {
+      // If local returns empty, check if we need to fetch from remote:
+      // 1. Cache is completely empty (first launch) - fetch from remote
+      // 2. The requested page index is beyond what we have in cache - fetch from remote
+      int cacheCount = homeLocalDataSource.getFeaturedBooksCount();
+      int requiredIndex = pageNumber * 10;
+
+      if (!homeLocalDataSource.hasFeaturedBooksInCache() ||
+          requiredIndex >= cacheCount) {
         featuredBooks = await homeRemoteDataSource.fetchFeaturedBooks(
           pageNumber: pageNumber,
         );
@@ -54,10 +58,14 @@ class HomeRepoImpl implements HomeRepo {
       if (newestBooks.isNotEmpty) {
         return Right(newestBooks);
       }
-      // If local returns empty, check if cache has any data
-      // If cache is empty (first launch), fetch from remote
-      // If cache has data but this page is empty, we've exhausted local pages
-      if (!homeLocalDataSource.hasNewestBooksInCache() || pageNumber == 0) {
+      // If local returns empty, check if we need to fetch from remote:
+      // 1. Cache is completely empty (first launch) - fetch from remote
+      // 2. The requested page index is beyond what we have in cache - fetch from remote
+      int cacheCount = homeLocalDataSource.getNewestBooksCount();
+      int requiredIndex = pageNumber * 10;
+
+      if (!homeLocalDataSource.hasNewestBooksInCache() ||
+          requiredIndex >= cacheCount) {
         newestBooks = await homeRemoteDataSource.fetchNewestBooks(
           pageNumber: pageNumber,
         );
